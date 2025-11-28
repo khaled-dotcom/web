@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Phase1 - Quick Tests</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body { padding: 1rem; font-family: sans-serif; }
+    #test-output { margin-top: 1rem; }
+    .controls { display:flex; gap:8px; }
+  </style>
+</head>
+<body>
+  <h2>Quick Verification - Login & Order Flow (In-Memory)</h2>
+  <div class="controls">
+    <button id="run-btn" class="btn btn-primary">Run Tests</button>
+    <button id="reset-btn" class="btn btn-outline">Reset Data</button>
+  </div>
+  <div id="test-output"></div>
+
+  <script src="js/main.js"></script>
+  <script src="js/helpers.js"></script>
+  <script src="js/validation.js"></script>
+
+  <script>
+    function appendResult(text, ok) {
+      const el = document.createElement('div');
+      el.textContent = (ok ? 'PASS: ' : 'FAIL: ') + text;
+      el.style.padding = '6px 8px';
+      el.style.borderRadius = '4px';
+      el.style.marginBottom = '6px';
+      el.style.background = ok ? '#e6ffed' : '#ffe6e6';
+      el.style.color = ok ? '#065f46' : '#7f1d1d';
+      const out = document.getElementById('test-output');
+      if (out) out.appendChild(el);
+      console.log((ok ? 'PASS: ' : 'FAIL: ') + text);
+    }
+
+    function clearOutput(){ document.getElementById('test-output').innerHTML = ''; }
+
+    function runTests(){
+      clearOutput();
+      // Reset in-memory
+      currentUser = null; allUsers = []; cart = []; allOrders = [];
+
+      // Register
+      const r = register('Tester','tester@example.com','0123456789','Addr','pwd123');
+      appendResult('Register user', r === true && currentUser && currentUser.email === 'tester@example.com');
+
+      // Logout and login
+      logout();
+      const l = login('tester@example.com','pwd123');
+      appendResult('Login as user', l === true && isLoggedIn() && !isAdmin());
+
+      // Add menu item to cart and create order
+      if (typeof menuData !== 'undefined' && menuData.length>0){
+        addToCart(Object.assign({}, menuData[0]));
+        appendResult('Add item to cart', getCartItemCount()>0);
+        const order = createOrder();
+        appendResult('Create order', !!order && allOrders.length===1);
+      } else {
+        appendResult('Menu available', false);
+      }
+
+      // Login admin
+      logout();
+      const la = login('admin@foodorder.com','admin123');
+      appendResult('Login as admin', la === true && isAdmin());
+
+      // Admin reads and updates order
+      if (allOrders.length>0){
+        const ord = allOrders[0];
+        appendResult('Admin sees order', !!getOrderById(ord.id));
+        getOrderById(ord.id).status = 'preparing';
+        appendResult('Admin updates status', getOrderById(ord.id).status === 'preparing');
+      } else {
+        appendResult('Orders exist', false);
+      }
+
+      appendResult('Tests completed (in-memory)', true);
+    }
+
+    document.getElementById('run-btn').addEventListener('click', runTests);
+    document.getElementById('reset-btn').addEventListener('click', function(){ currentUser=null; allUsers=[]; cart=[]; allOrders=[]; clearOutput(); appendResult('Reset done', true); });
+  </script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - Food Ordering Platform</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">🍽️ FoodOrder</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="order-tracking.html">Track Order</a></li>
+                <li>
+                    <a href="cart.html" class="cart-icon">
+                        🛒
+                        <span class="cart-badge" style="display: none;">0</span>
+                    </a>
+                </li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1 class="text-center mb-3">Our Menu</h1>
+        
+        <div class="category-filter">
+            <button class="category-btn active" onclick="filterCategory('All')">All</button>
+            <button class="category-btn" onclick="filterCategory('Appetizer')">Appetizers</button>
+            <button class="category-btn" onclick="filterCategory('Main Course')">Main Courses</button>
+            <button class="category-btn" onclick="filterCategory('Dessert')">Desserts</button>
+            <button class="category-btn" onclick="filterCategory('Side')">Sides</button>
+            <button class="category-btn" onclick="filterCategory('Beverage')">Beverages</button>
+        </div>
+
+        <div class="menu-grid" id="menu-grid">
+            <!-- Menu items will be populated by JavaScript -->
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 FoodOrder Platform. All rights reserved.</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/cart.js"></script>
+    <script>
+        // Display menu items
+        function displayMenu(category = 'All') {
+            const menuGrid = document.getElementById('menu-grid');
+            const filteredItems = category === 'All' 
+                ? menuData 
+                : menuData.filter(item => item.category === category);
+
+            if (filteredItems.length === 0) {
+                menuGrid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <div class="empty-state-icon">🍽️</div>
+                        <h3>No items found</h3>
+                        <p>Try selecting a different category</p>
+                    </div>
+                `;
+                return;
+            }
+
+            menuGrid.innerHTML = filteredItems.map(item => `
+                <div class="menu-item">
+                    <div class="menu-item-image">${item.image}</div>
+                    <div class="menu-item-content">
+                        <div class="menu-item-name">${item.name}</div>
+                        <div class="menu-item-description">${item.description}</div>
+                        <div class="menu-item-footer">
+                            <div class="menu-item-price">$${item.price.toFixed(2)}</div>
+                            <div class="rating">⭐ ${item.rating} (${item.reviews})</div>
+                        </div>
+                        <button class="btn btn-primary btn-small" style="width: 100%; margin-top: 1rem;" onclick="addToCart(${item.id})">
+                            Add to Cart
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Filter by category
+        function filterCategory(category) {
+            // Update active button
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Display filtered menu
+            displayMenu(category);
+        }
+
+        // Initialize menu on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            displayMenu();
+        });
+    </script>
+</body>
+</html>
+

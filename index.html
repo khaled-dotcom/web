@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Ordering Platform - Home</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">🍽️ FoodOrder</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="order-tracking.html">Track Order</a></li>
+                <li>
+                    <a href="cart.html" class="cart-icon">
+                        🛒
+                        <span class="cart-badge" style="display: none;">0</span>
+                    </a>
+                </li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Welcome to FoodOrder</h1>
+            <p>Order delicious food from your favorite restaurant with real-time tracking</p>
+            <a href="menu.html" class="btn btn-primary">Browse Menu</a>
+        </section>
+
+        <section class="features">
+            <h2 class="text-center mb-4">Why Choose Us?</h2>
+            <div class="menu-grid" style="grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));">
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">⚡</div>
+                    <h3>Fast Delivery</h3>
+                    <p>Get your food delivered quickly and hot</p>
+                </div>
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">📍</div>
+                    <h3>Real-Time Tracking</h3>
+                    <p>Track your order from kitchen to your door</p>
+                </div>
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">⭐</div>
+                    <h3>Quality Food</h3>
+                    <p>Fresh ingredients, delicious meals</p>
+                </div>
+                <div class="card text-center">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">💰</div>
+                    <h3>Best Prices</h3>
+                    <p>No hidden fees, transparent pricing</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="popular-items mt-4">
+            <h2 class="text-center mb-4">Popular Items</h2>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="menu-item-image">🍕</div>
+                    <div class="menu-item-content">
+                        <div class="menu-item-name">Margherita Pizza</div>
+                        <div class="menu-item-description">Classic pizza with fresh tomatoes, mozzarella, and basil</div>
+                        <div class="menu-item-footer">
+                            <div class="menu-item-price">$12.99</div>
+                            <div class="rating">⭐ 4.5 (24)</div>
+                        </div>
+                        <button class="btn btn-primary btn-small" style="width: 100%; margin-top: 1rem;" onclick="addToCart(1)">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-item-image">🍔</div>
+                    <div class="menu-item-content">
+                        <div class="menu-item-name">Grilled Chicken Burger</div>
+                        <div class="menu-item-description">Juicy grilled chicken breast with lettuce, tomato, and special sauce</div>
+                        <div class="menu-item-footer">
+                            <div class="menu-item-price">$11.99</div>
+                            <div class="rating">⭐ 4.7 (32)</div>
+                        </div>
+                        <button class="btn btn-primary btn-small" style="width: 100%; margin-top: 1rem;" onclick="addToCart(3)">Add to Cart</button>
+                    </div>
+                </div>
+                <div class="menu-item">
+                    <div class="menu-item-image">🍰</div>
+                    <div class="menu-item-content">
+                        <div class="menu-item-name">Chocolate Lava Cake</div>
+                        <div class="menu-item-description">Warm chocolate cake with molten center, served with vanilla ice cream</div>
+                        <div class="menu-item-footer">
+                            <div class="menu-item-price">$6.99</div>
+                            <div class="rating">⭐ 4.8 (45)</div>
+                        </div>
+                        <button class="btn btn-primary btn-small" style="width: 100%; margin-top: 1rem;" onclick="addToCart(4)">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-3">
+                <a href="menu.html" class="btn btn-outline">View Full Menu</a>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 FoodOrder Platform. All rights reserved.</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/cart.js"></script>
+</body>
+</html>
+

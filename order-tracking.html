@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Order - Food Ordering Platform</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html" class="logo">🍽️ FoodOrder</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html">Menu</a></li>
+                <li><a href="order-tracking.html">Track Order</a></li>
+                <li>
+                    <a href="cart.html" class="cart-icon">
+                        🛒
+                        <span class="cart-badge" style="display: none;">0</span>
+                    </a>
+                </li>
+                <li><a href="login.html">Login</a></li>
+                <li><a href="register.html">Register</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h1 class="mb-3">Track Your Order</h1>
+
+        <div id="order-tracking">
+            <!-- Order tracking will be populated by JavaScript -->
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">Order History</div>
+            <div id="order-history">
+                <!-- Order history will be populated by JavaScript -->
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 FoodOrder Platform. All rights reserved.</p>
+    </footer>
+
+    <script src="js/main.js"></script>
+    <script src="js/order-tracking.js"></script>
+    <script>
+        // Order tracking with in-memory data
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderId = urlParams.get('id');
+            
+            if (orderId) {
+                // Get order from in-memory allOrders array
+                const savedOrder = getOrderById(orderId);
+                
+                if (savedOrder) {
+                    displaySavedOrder(savedOrder);
+                } else {
+                    // Fallback to dummy data
+                    displayOrderTracking(orderId);
+                }
+            } else {
+                // Show order history
+                displayOrderHistory();
+            }
+        });
+
+        function displaySavedOrder(order) {
+            const trackingDiv = document.getElementById('order-tracking');
+            const orderDate = new Date(order.date);
+            const statusStages = [
+                { key: 'pending', label: 'Order Placed', icon: '📝' },
+                { key: 'preparing', label: 'Preparing', icon: '👨‍🍳' },
+                { key: 'on_the_way', label: 'On the Way', icon: '🚗' },
+                { key: 'delivered', label: 'Delivered', icon: '✅' }
+            ];
+            
+            const currentStatusIndex = statusStages.findIndex(s => s.key === order.status);
+            
+            let html = `
+                <div class="card">
+                    <div class="card-header">Order #${order.id}</div>
+                    <p style="color: var(--text-light); margin-bottom: 2rem;">
+                        Placed on ${orderDate.toLocaleDateString()} at ${orderDate.toLocaleTimeString()}
+                    </p>
+                    <div class="order-status">
+            `;
+            
+            statusStages.forEach((stage, index) => {
+                let stepClass = '';
+                if (index < currentStatusIndex) {
+                    stepClass = 'completed';
+                } else if (index === currentStatusIndex) {
+                    stepClass = 'active';
+                }
+                
+                html += `
+                    <div class="status-step ${stepClass}">
+                        <div class="status-icon">${stage.icon}</div>
+                        <div class="status-label">${stage.label}</div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                    </div>
+                    <div style="margin-top: 2rem;">
+                        <h3 style="margin-bottom: 1rem;">Order Details</h3>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+            `;
+            
+            order.items.forEach(item => {
+                html += `
+                    <tr>
+                        <td>${item.name}</td>
+                        <td>${item.quantity}</td>
+                        <td>$${item.price.toFixed(2)}</td>
+                        <td>$${(item.price * item.quantity).toFixed(2)}</td>
+                    </tr>
+                `;
+            });
+            
+            html += `
+                            </tbody>
+                            <tfoot>
+                                <tr style="font-weight: bold; border-top: 2px solid var(--border-color);">
+                                    <td colspan="3" style="text-align: right;">Total:</td>
+                                    <td>$${order.total.toFixed(2)}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            `;
+            
+            trackingDiv.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
+
